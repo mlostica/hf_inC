@@ -35,7 +35,7 @@ double tElt(double p_oN, double q_oN, prim orbP[], prim orbQ[], int pLen, int qL
 //////////////////
 
 double vnElt(double p_oN, double q_oN, prim orbP[], prim orbQ[], int pLen, int qLen,
-  double z, vector nucCoords);
+  nuc nucleus);
 
 //////////////////
 // yeet eri

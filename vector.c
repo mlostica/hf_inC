@@ -2,6 +2,7 @@
 
 #include "vector.h"
 
+
 //****************************************************************//
 
 vector retAddedVectors(vector vect1, vector vect2) {
@@ -50,3 +51,15 @@ double retVectorMagnitude(vector vect) {
   return sqrt(retDotProduct(vect, vect));
 }
 
+//****************************************************************//
+
+vector newVec(double x, double y, double z) {
+  vector v;
+
+  v.x = x;
+  v.y = y;
+  v.z = z;
+  v.mag = retVectorMagnitude(v);
+
+  return v;
+}

@@ -3,6 +3,7 @@
 //*******************************************//
 
 #include <stddef.h>
+#include <stdio.h>
 #include <math.h>
 #include "vector.h"
 #include "basis.h"
@@ -100,7 +101,6 @@ double tElt(double p_oN, double q_oN, prim orbP[], prim orbQ[], int pLen, int qL
     exponent = exp(-1.0 * ((orbP[p].ex*orbQ[q].ex)/(orbP[p].ex+orbQ[q].ex))*distSq);
 
     // increment total
-    total += pre1 * pre2 * exponent;
     total += pre1 * (pre2 + pre3) * pre4 * exponent;
     }
   }
@@ -111,7 +111,7 @@ double tElt(double p_oN, double q_oN, prim orbP[], prim orbQ[], int pLen, int qL
 //////////////////
 
 double vnElt(double p_oN, double q_oN, prim orbP[], prim orbQ[], int pLen, int qLen, 
-  double z, vector nucCoords){
+  nuc nucleus){
 
   // p_oN, q_oN, normalization for total gtos
   // orbP[], orbQ[], arrays of prim orbs
@@ -144,12 +144,12 @@ double vnElt(double p_oN, double q_oN, prim orbP[], prim orbQ[], int pLen, int q
       scaleVector(orbP[p].ctr, orbP[p].ex), 
       scaleVector(orbQ[q].ctr, orbQ[q].ex)
       ), rpFac);
-    rpDist = retSubtractedVectors(rp, nucCoords);
+    rpDist = retSubtractedVectors(rp, nucleus.coords);
     rpSq = retDotProduct(rpDist, rpDist);
 
     // compute factors
     pre1 = p_oN * q_oN * orbP[p].co * orbQ[q].co * orbP[p].pN * orbQ[q].pN;
-    pre2 = -2.0 * z * (pi/(orbP[p].ex+orbQ[q].ex));
+    pre2 = -2.0 * nucleus.z * (pi/(orbP[p].ex+orbQ[q].ex));
     exponent = exp(-1.0 * ((orbP[p].ex*orbQ[q].ex)/(orbP[p].ex+orbQ[q].ex))*distSq);
 
     if (rpSq < 0.00001) {
@@ -215,6 +215,11 @@ double eriElt(double p_oN, double q_oN, double r_oN, double s_oN,
           ), rsAvgFac);
         wDist = retSubtractedVectors(pqAvg, rsAvg);
         wDistSq = retDotProduct(wDist, wDist);
+
+        // compute rho
+        rhoNumer = (orbP[p].ex + orbQ[q].ex) * (orbR[r].ex + orbS[s].ex);
+        rhoDenom = orbP[p].ex + orbQ[q].ex + orbR[r].ex + orbS[s].ex;
+        rho = rhoNumer / rhoDenom;
 
         // compute factors
         pre1 = p_oN * q_oN * r_oN * s_oN * orbP[p].pN * orbQ[q].pN * orbR[r].pN * orbS[s].pN;

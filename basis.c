@@ -31,18 +31,12 @@ double normOrbPrims(prim o[], int orbLen){
   //int n = sizeof(o);
   //int n = sizeof(o[0]);
   //int n = orbLen;
-  printf("exponent of zeroth %f \n", o[0].ex);
-
-  printf("total at start %f \n", total);
-
-  printf("bytes of array %i \n", sizeof(o));
 
   vector vecDiff;
   double distSq, pre1, pre2, exponent;
 
   for( p = 0 ; p < orbLen ; p++){
     for( q = 0 ; q < orbLen ; q++){
-      printf("index %i \n", p);
       
       // get square distances btw prim orbs
       vecDiff = retSubtractedVectors(o[p].ctr, o[q].ctr);
@@ -55,7 +49,6 @@ double normOrbPrims(prim o[], int orbLen){
 
       // increment total
       total += (pre1 * pre2 * exponent);
-      printf("total so far is %f \n", total);
     }
   }
 

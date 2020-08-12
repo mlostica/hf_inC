@@ -4,3 +4,5 @@ gcc main.c vector.c -o main
 gcc vector.c basis.c main.c -o main -lm
 
 gcc vector.c basis.c matrixElts.c main.c -o main -lm
+
+gcc vector.c basis.c matrixElts.c twoOrbMain.c -o twoOrbMain -lm
