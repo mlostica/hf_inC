@@ -6,3 +6,11 @@ gcc vector.c basis.c main.c -o main -lm
 gcc vector.c basis.c matrixElts.c main.c -o main -lm
 
 gcc vector.c basis.c matrixElts.c twoOrbMain.c -o twoOrbMain -lm
+
+icpc vector.c basis.c matrixElts.c twoOrbMain.c -o twoOrbMain -std=standard -DMKL_LP64 -w0 -O2 -lm \
+-I/global/software/imkl/2017.0.098-iimpi-2017.0.098/mkl/include \
+-Wl,--start-group \
+/global/software/imkl/2017.0.098-iimpi-2017.0.098/mkl/lib/intel64/libmkl_intel_lp64.a \
+/global/software/imkl/2017.0.098-iimpi-2017.0.098/mkl/lib/intel64/libmkl_intel_thread.a \
+/global/software/imkl/2017.0.098-iimpi-2017.0.098/mkl/lib/intel64/libmkl_core.a \
+-Wl,--end-group /global/software/icc/2017.0.098/lib/intel64/libiomp5.a -lpthread

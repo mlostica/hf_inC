@@ -18,6 +18,7 @@
 int main(){
 
   // initialize nuclei
+  // eventually these should be read in 
   nuc *hA, *hB;
   hA = (nuc *)malloc(sizeof(nuc) + sizeof(double)*5);
   hB = (nuc *)malloc(sizeof(nuc) + sizeof(double)*5);
@@ -43,31 +44,37 @@ int main(){
 
   // initialize primitive orbs for each full gto
   // hard coded lol
+  // eventually these should be read in 
   oA -> orbPrims[0].ex = 0.3425250914E+01;
   oA -> orbPrims[0].co = 0.1543289673;
-  oA -> orbPrims[0].pN = normPrim(oA -> orbPrims[0]);
 
   oB -> orbPrims[0].ex = 0.3425250914E+01;
   oB -> orbPrims[0].co = 0.1543289673;
-  oB -> orbPrims[0].pN = normPrim(oB -> orbPrims[0]);
-
 
   oA -> orbPrims[1].ex = 0.6239137298;
   oA -> orbPrims[1].co = 0.5353281423;
-  oA -> orbPrims[1].pN = normPrim(oA -> orbPrims[1]);
 
   oB -> orbPrims[1].ex = 0.6239137298;
   oB -> orbPrims[1].co = 0.5353281423;
-  oB -> orbPrims[1].pN = normPrim(oB -> orbPrims[1]);
-
 
   oA -> orbPrims[2].ex = 0.1688554040;
   oA -> orbPrims[2].co = 0.4446345422;
-  oA -> orbPrims[2].pN = normPrim(oA -> orbPrims[2]);
 
   oB -> orbPrims[2].ex = 0.1688554040;
   oB -> orbPrims[2].co = 0.4446345422;
-  oB -> orbPrims[2].pN = normPrim(oB -> orbPrims[2]);
+
+  // assign positions for primitive orbitals
+  // and normalize them
+  // also initialize inidices
+  int i,j,k,l;
+  for (i = 0; i < plen; i++) {
+    
+    oA -> orbPrims[i].ctr = newVec(0.0, 0.0, 0.0);
+    oB -> orbPrims[i].ctr = newVec(0.0, 0.0, 1.4);
+
+    oA -> orbPrims[i].pN = normPrim(oA -> orbPrims[i]);
+    oB -> orbPrims[i].pN = normPrim(oB -> orbPrims[i]);
+  }
 
   // normalize total gtos
   oA -> oN = normOrbPrims( oA -> orbPrims, oA -> orbLen);
@@ -75,12 +82,12 @@ int main(){
 
   // assign positions for orbitals
   // also initialize inidices
-  int i,j,k,l;
-  for (i = 0; i < plen; i++) {
-    
-    oA -> orbPrims[i].ctr = newVec(0.0, 0.0, 0.0);
-    oB -> orbPrims[i].ctr = newVec(0.0, 0.0, 1.4);
-  }
+  //int i,j,k,l;
+  //for (i = 0; i < plen; i++) {
+  //  
+  //  oA -> orbPrims[i].ctr = newVec(0.0, 0.0, 0.0);
+  //  oB -> orbPrims[i].ctr = newVec(0.0, 0.0, 1.4);
+  //}
 
   // make array of orbs
   orb *orbs[blen];
@@ -105,22 +112,27 @@ int main(){
 
     for (j = 0; j <= i ; j++) {
 
+      // overlap 
       sMat[i][j] = sMat[j][i] = sElt(orbs[i] -> oN, orbs[j] -> oN
         , orbs[i] -> orbPrims, orbs[j] -> orbPrims
         , orbs[i] -> orbLen, orbs[j] -> orbLen);
 
+      // kinetic energy
       tMat[i][j] = tMat[j][i] = tElt(orbs[i] -> oN, orbs[j] -> oN
         , orbs[i] -> orbPrims, orbs[j] -> orbPrims
         , orbs[i] -> orbLen, orbs[j] -> orbLen);
 
       for (k = 0; k < nat; k++) {
 
+        // electron-nuclear attraction
         vnMat[i][j] += vnElt(orbs[i] -> oN, orbs[j] -> oN
           , orbs[i] -> orbPrims, orbs[j] -> orbPrims
           , orbs[i] -> orbLen, orbs[j] -> orbLen
           , *nuclei[k]);
 
       vnMat[j][i] = vnMat[i][j];
+
+      // core hamiltonian elts 
       hCore[i][j] = hCore[j][i] = tMat[i][j] + vnMat[i][j]; 
       }
     }
